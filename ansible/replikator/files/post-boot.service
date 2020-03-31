@@ -1,0 +1,17 @@
+[Unit]
+# The script needs to execute after:
+# network interfaces are configured
+Wants=network-online.target
+After=network-online.target
+# all remote filesystems (NFS/_netdev) are mounted
+After=remote-fs.target
+# name (DNS) and user resolution from remote databases (AD/LDAP) are available
+After=nss-user-lookup.target nss-lookup.target
+# the system clock has synchronized
+After=time-sync.target
+
+[Service]
+ExecStart=/usr/local/bin/post-boot.sh
+
+[Install]
+WantedBy=multi-user.target

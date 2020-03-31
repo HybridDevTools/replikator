@@ -1,0 +1,8 @@
+---
+
+- name: Restart MySQL service
+  systemd:
+    name: mysql
+    enabled: yes
+    state: restarted
+    daemon_reload: yes

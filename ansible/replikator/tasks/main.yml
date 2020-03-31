@@ -1,0 +1,171 @@
+---
+
+- name: Build cache
+  apt:
+    update_cache: yes
+
+- name: Update all packages to the latest version
+  apt:
+    upgrade: dist
+
+- name: ensure debug packages are installed
+  apt:
+    name:
+      - htop
+      - iotop
+      - linux-virtual-hwe-18.04
+    state: present
+
+- name: set ZFS fine tuning
+  copy:
+    src: zfs.conf
+    dest: /etc/modprobe.d/zfs.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: ensure zfs is installed
+  apt:
+    name: zfs-dkms
+    state: present
+
+- name: check if myzpool already exists
+  shell: zpool list | grep myzpool
+  register: zpoolexists
+  ignore_errors: True
+
+- name: create the zfs pool
+  shell: zpool create -o ashift=12 -f myzpool {{ replikator_volume }}
+  args:
+    creates: /myzpool
+  when: zpoolexists is failed
+
+- name: zfs tuning
+  shell: "{{ item }}"
+  with_items:
+    - 'zpool set autoexpand=on myzpool'
+    - 'zfs set compression=lz4 myzpool'
+    - 'zfs set atime=off myzpool'
+    - 'zfs set xattr=sa myzpool'
+    - 'zfs set recordsize=16k myzpool'
+    - 'zfs set primarycache=metadata myzpool'
+    - 'zfs set logbias=throughput myzpool'
+    - 'zfs set checksum=off myzpool'
+    - 'zfs set exec=off myzpool'
+
+- name: create myzpool/mysql-data subvolume
+  shell: zfs create myzpool/mysql-data
+  args:
+    creates: /myzpool/mysql-data
+  when: zpoolexists is failed
+
+- name: create myzpool/mysql-snapshots subvolume
+  shell: zfs create myzpool/mysql-snapshots
+  args:
+    creates: /myzpool/mysql-snapshots
+  when: zpoolexists is failed
+
+- name: create myzpool/mysql-data/mysql subvolume
+  shell: zfs create -o mountpoint=/var/lib/mysql -o canmount=on myzpool/mysql-data/mysql
+  args:
+    creates: /var/lib/mysql
+  when: zpoolexists is failed
+
+- name: enable replikator with apparmor
+  template:
+    src: apparmor_replikator.j2
+    dest: /etc/apparmor.d/local/usr.sbin.mysqld
+    owner: root
+    group: root
+    mode: 0644
+
+- name: ensure mysql-server is installed
+  apt:
+    name:
+      - mysql-server
+      - python-mysqldb
+    state: present
+
+- name: copying replikator-ctl with owner and permissions
+  copy:
+    src: "{{ role_path  }}/files/replikator-ctl.sh"
+    dest: /usr/local/bin/replikator-ctl
+    owner: root
+    group: root
+    mode: 0755
+
+- name: copying replikator.conf with owner and permissions
+  template:
+    src: replikator.conf.j2
+    dest: /etc/replikator.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: create /etc/mysql/snapshots.d
+  file:
+    path: /etc/mysql/snapshots.d
+    state: directory
+
+- name: copying 00-snapshots.tpl with owner and permissions
+  template:
+    src: snapshots-conf.tpl.j2
+    dest: /etc/mysql/snapshots.d/00-snapshots.tpl
+    owner: root
+    group: root
+    mode: 0644
+
+- name: create "{{ replikator_sockdir }}"
+  file:
+    path: "{{ replikator_sockdir }}"
+    state: directory
+    owner: mysql
+    group: mysql
+
+- name: copying post-boot.sh with owner and permissions
+  template:
+    src: post-boot.sh.j2
+    dest: /usr/local/bin/post-boot.sh
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Install systemd post-boot.unit
+  copy:
+    src: post-boot.service
+    dest: /etc/systemd/system/post-boot.service
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: enable service post-boot and ensure it is not masked
+  systemd:
+    name: post-boot
+    enabled: yes
+    masked: no
+
+- name: copying replikator.cnf with owner and permissions
+  template:
+    src: mysql_replikator.cnf.j2
+    dest: /etc/mysql/mysql.conf.d/replikator.cnf
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart MySQL service
+
+- name: Create Replikator user
+  mysql_user:
+    name: "{{ replikator_dbuser }}"
+    host: "localhost"
+    password: "{{ replikator_dbpass }}"
+    priv: "*.*:EVENT,LOCK TABLES,RELOAD,REPLICATION CLIENT,SELECT,SHOW DATABASES,SHUTDOWN,SUPER"
+    state: present
+
+- name: Create global Replikator users
+  mysql_user:
+    name: "{{ item.username }}"
+    host: "{{ item.host }}"
+    password: "{{ item.password }}"
+    priv: "{{ item.privilege }}"
+    state: present
+  with_items: "{{ replikator_global_users }}"

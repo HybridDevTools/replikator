@@ -1,0 +1,20 @@
+[mysqld]
+bind_address={{ replikator_bindaddress }}
+port={{ replikator_baseprocessport }}
+innodb_buffer_pool_size=1024M
+innodb_max_dirty_pages_pct=0
+
+{% if replikator_servermode == "SLAVE" %}
+read_only=1
+{% endif %}
+
+{% if replikator_server_id %}
+server_id={{ replikator_server_id }}
+{% endif %}
+
+{% for item in replikator_do_db %}
+replicate_do_db={{ item }}
+{% endfor %}
+
+[client]
+protocol=tcp

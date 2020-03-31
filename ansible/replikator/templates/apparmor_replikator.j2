@@ -1,0 +1,9 @@
+# Allow snapshots dir access
+  {{ replikator_snapdir }}/ r,
+  {{ replikator_snapdir }}/** rwk,
+
+
+# Allow pid, socket, socket lock file access
+  {{ replikator_sockdir }}/ r,
+  {{ replikator_sockdir }}/** rwk,
+

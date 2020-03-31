@@ -1,0 +1,54 @@
+###cdate = {date}
+###ctime = {time}
+###metas = {metas}
+
+[mysqld]
+basedir                                 = /usr
+secure_file_priv                        = ""
+bind_address                            = 0.0.0.0
+datadir                                 = {snapdir}/{instance}
+default_storage_engine                  = InnoDB
+expire_logs_days                        = 10
+ft_min_word_len                         = 2
+open_files_limit                        = 16384
+innodb_buffer_pool_instances            = {nbmempools}
+innodb_buffer_pool_size                 = {allocmem}M
+innodb_file_per_table                   = True
+innodb_flush_log_at_trx_commit          = 0
+innodb_io_capacity                      = 1000
+innodb_log_buffer_size                  = 64M
+innodb_open_files                       = 16384
+innodb_read_io_threads                  = 2
+innodb_write_io_threads                 = 2
+join_buffer_size                        = 256M
+key_buffer_size                         = 384M
+lc_messages_dir                         = /usr/share/mysql
+log_error                               = /var/log/mysql/mysql-snap-{instance}.err
+log_output                              = FILE
+log_queries_not_using_indexes           = False
+long_query_time                         = 20
+max_allowed_packet                      = 64M
+max_connect_errors                      = 10000
+max_connections                         = 1000
+max_heap_table_size                     = 1024M
+max_tmp_tables                          = 96
+myisam_sort_buffer_size                 = 64M
+pid_file                                = {{ replikator_sockdir }}/mysqld-snap-{instance}.pid
+port                                    = {port}
+query_cache_limit                       = 4M
+query_cache_size                        = 128M
+query_prealloc_size                     = 64K
+read_buffer_size                        = 128M
+read_rnd_buffer_size                    = 8M
+skip_innodb_doublewrite                 = True
+skip_external_locking
+skip_name_resolve                       = 0
+skip_slave_start
+slow_query_log                          = False
+socket                                  = {{ replikator_sockdir }}/mysqld-snap-{instance}.sock
+sort_buffer_size                        = 2M
+thread_cache_size                       = 8
+thread_stack                            = 192K
+tmp_table_size                          = 1024M
+tmpdir                                  = /tmp
+user                                    = mysql

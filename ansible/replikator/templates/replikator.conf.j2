@@ -1,0 +1,25 @@
+###################################
+# Saltified, don't edit by hand ! #
+###################################
+
+BACKUPNUM={{ replikator_backupnum }}
+SLOTSIZE={{ replikator_slotsize }}
+BASEPORT={{ replikator_baseport }}
+BASEPROCESSPORT={{ replikator_baseprocessport }}
+MEMPERINSTANCE={{ replikator_memperinstance }}
+MEMLIMIT={{ replikator_memlimit }}
+SERVERMODE={{ replikator_servermode }}
+
+# ZFS settings
+ZFSPOOL='{{ replikator_zfspool }}'
+ZFSDATASET='{{ replikator_zfsdataset }}'
+ZFSSNAPSET='{{ replikator_zfssnapset }}'
+
+SOCKDIR='{{ replikator_sockdir }}'
+DATADIR='{{ replikator_datadir }}'
+SNAPDIR='{{ replikator_snapdir }}'
+CONFDIR='{{ replikator_confdir }}'
+CONFTPL='{{ replikator_conftpl }}'
+DBUSER='{{ replikator_dbuser }}'
+DBPASS='{{ replikator_dbpass }}'
+

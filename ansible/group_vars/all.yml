@@ -1,0 +1,68 @@
+---
+
+##################################################
+# MySQL settings
+##################################################
+
+# Replikator base process settings
+replikator_bindaddress: "0.0.0.0"
+replikator_baseprocessport: 3306
+
+# Replikator admin user
+replikator_dbuser: "rpkuser"
+replikator_dbpass: "rpkpass"
+
+# Tell if your Replikator run as a standalone database server (MASTER mode)
+# or as a slave of a third party server (SLAVE mode)
+replikator_servermode: "MASTER"
+# replikator_readonly: "True"
+# replikator_server_id: "1001"
+# replikator_do_db:
+#   - db1
+#   - db2
+#   - db3
+
+# Optional users to add to the base instance
+replikator_global_users: [
+    {
+        username: "testuser",
+        password: "testpass",
+        privilege: "*.*:ALL",
+        host: "%"
+    }
+]
+
+
+##################################################
+# Replikator settings
+##################################################
+
+# Memory allocation per replica (GB)
+replikator_memperinstance: 1
+
+# Maximum memory allocated to replicas (GB)
+replikator_memlimit: 3
+
+# Max number of "backup" replicas used for automatic rotation
+replikator_backupnum: 10
+
+# Replicas starting port range
+replikator_baseport: 4000
+
+replikator_sockdir: "/run/replikator"
+replikator_datadir: "/var/lib/mysql"
+replikator_snapdir: "/myzpool/mysql-snapshots"
+replikator_confdir: "/etc/mysql/snapshots.d"
+replikator_conftpl: "00-snapshots.tpl"
+
+
+##################################################
+# ZFS settings
+##################################################
+
+# Device name for volume dedicated to 
+# database and replicas data storage (ZFS)
+replikator_volume: sdb
+replikator_zfspool: "myzpool"
+replikator_zfsdataset: "mysql-data/mysql"
+replikator_zfssnapset: "mysql-snapshots"
