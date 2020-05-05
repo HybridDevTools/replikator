@@ -88,11 +88,13 @@
 
 - name: copying replikator-ctl with owner and permissions
   copy:
-    src: "{{ role_path  }}/files/replikator-ctl.sh"
+    src: "../../src/replikator-ctl.sh"
     dest: /usr/local/bin/replikator-ctl
     owner: root
     group: root
     mode: 0755
+  tags:
+    - replikator
 
 - name: copying replikator.conf with owner and permissions
   template:
@@ -101,6 +103,8 @@
     owner: root
     group: root
     mode: 0644
+  tags:
+    - replikator
 
 - name: create /etc/mysql/snapshots.d
   file:
@@ -114,6 +118,8 @@
     owner: root
     group: root
     mode: 0644
+  tags:
+    - replikator
 
 - name: create "{{ replikator_sockdir }}"
   file:

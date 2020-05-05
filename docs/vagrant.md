@@ -17,6 +17,9 @@ To start the box :
 - go to the root of the cloned repo folder
 - start the box, first start will take some time to complete : `vagrant up`
 - get into the box : `vagrant ssh`
-- `replikator-ctl` needs privileges, use sudo, as an example, type `sudo replikator-ctl --list` you should get something similar to this 
+
+`replikator-ctl` needs privileges, use sudo, as an example, type `sudo replikator-ctl --list` you should get something similar to this picture :
 
 ![Replikator service with empty set](assets/rpk-list-empty.png)
+
+If it is the case, then you can now start playing, just take a look at [Usage](usage.md) or [Examples](examples.md).

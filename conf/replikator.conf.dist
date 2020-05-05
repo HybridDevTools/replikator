@@ -1,0 +1,27 @@
+##################################################
+# MySQL settings
+##################################################
+BASEPORT=4000
+BASEPROCESSPORT=3306
+SERVERMODE=MASTER
+DBUSER='rpkuser'
+DBPASS='rpkpass'
+
+##################################################
+# Replikator settings
+##################################################
+MEMPERINSTANCE=1
+MEMLIMIT=3
+BACKUPNUM=10
+SOCKDIR='/run/replikator'
+DATADIR='/var/lib/mysql'
+SNAPDIR='/myzpool/mysql-snapshots'
+CONFDIR='/etc/mysql/snapshots.d'
+CONFTPL='00-snapshots.tpl'
+
+##################################################
+# ZFS settings
+##################################################
+ZFSPOOL='myzpool'
+ZFSDATASET='mysql-data/mysql'
+ZFSSNAPSET='mysql-snapshots'

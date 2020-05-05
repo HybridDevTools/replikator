@@ -8,13 +8,15 @@ innodb_max_dirty_pages_pct=0
 read_only=1
 {% endif %}
 
-{% if replikator_server_id %}
+{% if replikator_server_id is defined %}
 server_id={{ replikator_server_id }}
 {% endif %}
 
+{% if replikator_do_db is defined %}
 {% for item in replikator_do_db %}
 replicate_do_db={{ item }}
 {% endfor %}
+{% endif %}
 
 [client]
 protocol=tcp

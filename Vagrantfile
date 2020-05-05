@@ -18,10 +18,10 @@ Vagrant.configure("2") do |config|
     vb.memory = 4096
     disk = "./datadir.vdi"
     unless File.exist?(disk)
-        vb.customize ['storagectl', :id, '--name',  'SAS Controller', '--add', 'sas',  '--controller', 'LSILogicSAS', '--portcount', 1]
+        vb.customize ['storagectl', :id, '--name',  'SAS', '--add', 'sas',  '--controller', 'LSILogicSAS', '--portcount', 1]
         vb.customize ['createhd', '--filename', disk, '--size', 8 * 1024]
     end
-    vb.customize ['storageattach', :id, '--storagectl', 'SAS Controller', '--port', 0, '--device', 0, '--type', 'hdd', '--medium', "#{disk}"]
+    vb.customize ['storageattach', :id, '--storagectl', 'SAS', '--port', 0, '--device', 0, '--type', 'hdd', '--medium', "#{disk}"]
   end
 
   config.vm.define "ubuntu1804", autostart: true do |ubuntu1804|

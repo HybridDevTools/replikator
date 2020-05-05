@@ -45,6 +45,9 @@ Before anything else, it is important to have the glossary in mind :
 
 Even if installing the script is easy, Replikator needs a specific host setup to work properly.
 
+- [Principles](docs/principles.md) : Some basics
 - [Testing with Vagrant](docs/vagrant.md) : if you just want to test quickly and don't want to bother with the details
 - [Installation](docs/installation.md) : Let's get the real thing !
 - [Usage](docs/usage.md) : CLI references
+- [SLAVE mode](docs/slave_mode.md) : Configuring a SLAVE mode setup
+- [Examples](docs/examples.md) 

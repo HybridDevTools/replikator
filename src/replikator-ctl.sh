@@ -72,9 +72,9 @@ fi
 Usage() {
 	echo
 	echo -e "Replication snaphots manager ${VERSION}"
-	echo -e "Author: Walid Moghrabi <w.moghrabi@servicemagic.eu>"
+	echo -e "Author: Walid Moghrabi <walid.moghrabi@lezard-visuel.com>"
 	echo
-	echo -e "This script ease the creation and management of database snapshoted instances"
+	echo -e "This script ease the creation and management of database replicas"
 	echo
 	echo -e "Usage: \e[1m$1 [OPTION]\e[0m"
 	echo
@@ -82,32 +82,32 @@ Usage() {
 	echo -e " -h, --help                            Show this help"
 	echo -e " -v, --verbose                         Increase verbosity"
 	echo -e " -q, --quiet                           Disable output completely"
-	echo -e " -c, --create <NAME>:<MEM>:<PORT>      Create a snapshot"
+	echo -e " -c, --create <NAME>:<MEM>:<PORT>      Create a replica"
 	echo -e "                                       (optionnal) <MEM> sets memory size limit for instance (default $MEMPERINSTANCE GB)"
 	echo -e "                                       (optionnal) <PORT> define fixed port for instance"
-	echo -e " -b, --backup                          Create a backup snapshot"
+	echo -e " -b, --backup                          Create a backup replica"
 	echo -e " -e, --exec                            Execute a post replica hook script"
 	echo -e "                                       (replica's port will be given as hook script parameter)"
 	echo -e " -f, --from-ip <IPADDR>                IP address for source IP based port redirect (3306 to running instance port)"
 	echo -e " -F, --from-replica <SOURCE>           If you want to create a replica based on another specific one"
-	echo -e " -l, --list                            List all created instances"
-	echo -e " -L, --list-backups                    List all created backups"
-	echo -e " -g, --get-status <NAME>               Get detailed instance informations"
-	echo -e " -d, --delete <NAME>                   Delete an instance"
-	echo -e " -p, --purge                           Delete every declared instances (running or not)"
-	echo -e " -P, --purge-all                       Delete every declared instances (running or not), including backups"
-	echo -e " -r, --run <NAME>                      Start an instance"
-	echo -e " -R, --refresh <NAME>                  Refresh an existing instance"
-	echo -e " -x, --stop <NAME>                     Stop an instance"
-	echo -e " -w, --add-redirect <NAME>             Add IP based redirect (3306 to running instance port)"
-	echo -e " -y, --del-redirect <NAME>             Delete IP based redirect (3306 to running instance port)"
+	echo -e " -l, --list                            List all created replicas"
+	echo -e " -L, --list-backups                    List all created backup replicas"
+	echo -e " -g, --get-status <NAME>               Get detailed replica informations"
+	echo -e " -d, --delete <NAME>                   Delete a replica"
+	echo -e " -p, --purge                           Delete every declared replicas (running or not)"
+	echo -e " -P, --purge-all                       Delete every declared replicas (running or not), including backup replicas"
+	echo -e " -r, --run <NAME>                      Start a replica"
+	echo -e " -R, --refresh <NAME>                  Refresh an existing replica"
+	echo -e " -x, --stop <NAME>                     Stop a replica"
+	echo -e " -w, --add-redirect <NAME>             Add IP based redirect (3306 to running replica port)"
+	echo -e " -y, --del-redirect <NAME>             Delete IP based redirect (3306 to running replica port)"
 	echo -e " -z, --purge-redirects                 Delete every IP based redirects"
 	echo -e " -m, --add-metas <NAME>:<JSON>         Add metas informations in JSON format"
-	echo -e " -t, --stop-replication                Stop the replication process"
-	echo -e " -T, --start-replication               Start the replication process"
+	echo -e " -t, --stop-replication                Stop the SLAVE replication process"
+	echo -e " -T, --start-replication               Start the SLAVE replication process"
 	echo -e " -o, --output <FORMAT>                 Define output format (stdout|json), stdout is default"
 	echo -e " -n, --noconfirm                       Assume Yes to all queries and do not prompt"
-	echo -e " -M, --monitor                         Autorefresh with <DELAY> seconds"
+	echo -e " -M, --monitor <DELAY>                 Autorefresh with <DELAY> seconds"
 	echo -e
 }
 
@@ -420,7 +420,7 @@ GetInstanceMetas() {
 	local instance=$1
 	local metas=`grep '###metas' $CONFDIR/snap-$instance.cnf | cut -d '=' -f 2- | sed -e 's/^ *//g'`
 
-	echo "$cmetas"
+	echo "$metas"
 }
 
 GetInstanceIpRedirects() {

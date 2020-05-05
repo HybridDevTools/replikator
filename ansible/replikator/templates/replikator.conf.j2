@@ -1,25 +1,27 @@
-###################################
-# Saltified, don't edit by hand ! #
-###################################
-
-BACKUPNUM={{ replikator_backupnum }}
-SLOTSIZE={{ replikator_slotsize }}
+##################################################
+# MySQL settings
+##################################################
 BASEPORT={{ replikator_baseport }}
 BASEPROCESSPORT={{ replikator_baseprocessport }}
+SERVERMODE={{ replikator_servermode }}
+DBUSER='{{ replikator_dbuser }}'
+DBPASS='{{ replikator_dbpass }}'
+
+##################################################
+# Replikator settings
+##################################################
 MEMPERINSTANCE={{ replikator_memperinstance }}
 MEMLIMIT={{ replikator_memlimit }}
-SERVERMODE={{ replikator_servermode }}
-
-# ZFS settings
-ZFSPOOL='{{ replikator_zfspool }}'
-ZFSDATASET='{{ replikator_zfsdataset }}'
-ZFSSNAPSET='{{ replikator_zfssnapset }}'
-
+BACKUPNUM={{ replikator_backupnum }}
 SOCKDIR='{{ replikator_sockdir }}'
 DATADIR='{{ replikator_datadir }}'
 SNAPDIR='{{ replikator_snapdir }}'
 CONFDIR='{{ replikator_confdir }}'
 CONFTPL='{{ replikator_conftpl }}'
-DBUSER='{{ replikator_dbuser }}'
-DBPASS='{{ replikator_dbpass }}'
 
+##################################################
+# ZFS settings
+##################################################
+ZFSPOOL='{{ replikator_zfspool }}'
+ZFSDATASET='{{ replikator_zfsdataset }}'
+ZFSSNAPSET='{{ replikator_zfssnapset }}'
