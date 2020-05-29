@@ -83,8 +83,21 @@
   apt:
     name:
       - mysql-server
+    state: present
+
+- name: ensure mysql-server is installed
+  apt:
+    name:
       - python-mysqldb
     state: present
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release != 'focal'
+
+- name: ensure mysql-server is installed
+  apt:
+    name:
+      - python3-mysqldb
+    state: present
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'focal'
 
 - name: copying replikator-ctl with owner and permissions
   copy:
