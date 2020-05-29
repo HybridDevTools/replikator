@@ -15,7 +15,7 @@ You can connect the MySQL server instance and the replicas from your local works
 To start the box :
 - clone the repo
 - go to the root of the cloned repo folder
-- start the box, first start will take some time to complete because of the Ansible provisionning that is ran the first time : `vagrant up`
+- start the box, be patient, it will take some time to complete because of the Ansible provisionning that is executed the first time : `vagrant up`
 - get into the box : `vagrant ssh`
 
 `replikator-ctl` needs privileges, use sudo, as an example, type `sudo replikator-ctl --list` you should get something similar to this picture :
@@ -25,3 +25,5 @@ To start the box :
 If it is the case, then you can now start playing, just take a look at [Usage](usage.md) or [Examples](examples.md).
 
 :warning: Ansible provisionning might fail sometimes, in case you have errors, you can force provisionning once your VM is started by using the `vragrant provision` command.
+
+:warning: A secondary drive is created for the box. This drive will be dedicated to the ZFS storage but in case you destroy the box and re-create it, Vagrant will probably fail. In order to avoid that, you must delete the **datadir.vdi** virtual hard drive that has been created at the root of the project's folder.
