@@ -37,7 +37,7 @@ Replikator don't have many requirements except :
 Before anything else, it is important to have the glossary in mind :
 - **replikator-ctl** : a bash script managing a "replikator" system.
 - **replikator** : a "replikator" is a server (bare metal or VM) running a MySQL (or MariaDB) service with its data stored on a ZFS storage pool and executinf the "replikator-ctl" script.
-- **base process** : the main MySQL/MariaDB instance running on a "replikator", this is the MySQL/MariaDB instance that from which we will create "instant replicas".
+- **base process** : the main MySQL/MariaDB instance running on a "replikator", this is the MySQL/MariaDB instance from which we will create "instant replicas".
 - **replica** : a "replica" is a newly instanciated running copy of a "base process" instance.
 - **backup replica** : a stopped replica that is used for backup/point in time recovery purpose. These replicas are always done in "safe mode".
 - **safe/normal/unsafe mode** : depending on the selected mode, a new replica can take more or less time to be instanciated and you could potentially lose some data in the process (typically the last second or the last transaction).
